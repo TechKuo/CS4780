@@ -1,0 +1,7 @@
+Steps for HW2Problem2
+1) Parse each line of bcan.train and store as array of tuples
+2) Create a Node class, define calc_entropy, to_string (for debugging), is_pure (returns boolean so we can determine whether or not to call 
+find_best_attribute on it).
+3) Define find_best_attribute(attributes_left, items) This function will have to calculate entropy before constructing Node. 
+4) Define id3(items, node) which will recursively construct a tree until all its branches are ended by leves. 
+5) print_tree (for debugging purposes)
