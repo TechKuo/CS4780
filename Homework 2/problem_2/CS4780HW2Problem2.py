@@ -13,6 +13,8 @@ class Node:
 
     num_nodes = 0
     num_leaves = 0
+    depth = 1
+    root = None
 
     def __init__(self, ben, mal, attr_range, items, entropy):
         """
@@ -31,18 +33,22 @@ class Node:
         self.left = None
         self.right = None
         if ben > mal:
-            self.label = 'B'
+            self.tree_label = 'B'
         else:
-            self.label = 'M'
+            self.tree_label = 'M'
         
         Node.num_nodes += 1
         if self.is_pure():
             Node.num_leaves += 1
 
     def __str__(self):
-        s = "Attribute " + str(self.attr) + ", <= " + str(self.val) + "\n" 
+        s = "Attribute " + str(self.attr) + " <= " + str(self.val) + "\n" 
         s += "Entropy: " + str(self.entropy) + "\n"
         s += "[" + str(self.ben) + ", " + str(self.mal) + "] \n"
+        s += "Number of Nodes:" + str(Node.num_nodes) + "\n"
+        s += "Number of Leaves: " + str(Node.num_leaves) + "\n"
+        #s += "Depth: " + str(Node.depth) + "\n"
+        s +=  "Tree Label: " + self.tree_label + "\n"
         return s
 
     @staticmethod
@@ -145,31 +151,43 @@ class Node:
             gt_attr_range[self.attr][0] = self.val + 1
             self.left = Node(rv[0], rv[1], lte_attr_range, rv[2], rv[3])
             self.right = Node(rv[4], rv[5], gt_attr_range, rv[6], rv[7])
-            print self
+            # print self
             self.left.make_babies()
             self.right.make_babies()
     
     def classify(self, item):
         if self.is_pure():
-            return self.label
+            return self.tree_label
         if item[self.attr] <= self.val:
-            self.left.classify(item)
+            return self.left.classify(item)
         else:
-            self.right.classify(item)
+            return self.right.classify(item)
 
-def init_tree():
+def classify_items(items):
+    # Create the decision tree
     root_ben = 0
     root_mal = 0
-    for example in train_set:
+    for example in items:
         if example[0] == 'B':
             root_ben += 1
         else:
             root_mal += 1
     root_entropy = Node.calc_entropy(root_ben, root_mal)
-    root_items = range(len(train_set))
+    root_items = range(len(items))
     root_attr_range = [[1,10] for x in range(10)]
-    root = Node(root_ben, root_mal, root_attr_range, root_items, root_entropy)
-    decision_tree = root.make_babies()
+    Node.root = Node(root_ben, root_mal, root_attr_range, root_items, root_entropy)
+    (Node.root).make_babies()
+    # Classify items
+    for example in items:
+        tree_label = (Node.root).classify(example)
+        example.append(tree_label)
+
+def find_accuracy(classified_items):
+    correct = 0
+    for item in classified_items:
+        if item[0] == item[10]:
+            correct += 1
+    return float(correct) / len(classified_items)
 
 
 def parse_file(f):
@@ -180,10 +198,13 @@ def parse_file(f):
         for i in range(1,10):
             temp = contents[i].split(':')
             contents[i] = int(temp[1])
-        l.append(tuple(contents[:10]))
+        l.append(contents[:10])
     return l
 
 train_set = parse_file(sys.argv[1])
-init_tree()
-
+classify_items(train_set)
+for example in train_set:
+    print str(example) + "\n" 
+acc = find_accuracy(train_set)
+print "Accuracy of training set: " + str(acc) + "\n"
 
