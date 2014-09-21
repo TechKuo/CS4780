@@ -14,7 +14,6 @@ class Node:
     num_nodes = 0
     num_leaves = 0
     depth = 1
-    root = None
 
     def __init__(self, ben, mal, attr_range, items, entropy):
         """
@@ -163,8 +162,7 @@ class Node:
         else:
             return self.right.classify(item)
 
-def classify_items(items):
-    # Create the decision tree
+def init_tree(items):
     root_ben = 0
     root_mal = 0
     for example in items:
@@ -175,11 +173,13 @@ def classify_items(items):
     root_entropy = Node.calc_entropy(root_ben, root_mal)
     root_items = range(len(items))
     root_attr_range = [[1,10] for x in range(10)]
-    Node.root = Node(root_ben, root_mal, root_attr_range, root_items, root_entropy)
-    (Node.root).make_babies()
-    # Classify items
+    root = Node(root_ben, root_mal, root_attr_range, root_items, root_entropy)
+    root.make_babies()
+    return root 
+
+def classify_items(dt,items):
     for example in items:
-        tree_label = (Node.root).classify(example)
+        tree_label = dt.classify(example)
         example.append(tree_label)
 
 def find_accuracy(classified_items):
@@ -202,7 +202,8 @@ def parse_file(f):
     return l
 
 train_set = parse_file(sys.argv[1])
-classify_items(train_set)
+decision_tree = init_tree(train_set)
+classify_items(decision_tree,train_set)
 for example in train_set:
     print str(example) + "\n" 
 acc = find_accuracy(train_set)
