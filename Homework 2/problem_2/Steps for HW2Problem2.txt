@@ -1,5 +1,5 @@
 Steps Left for HW2Problem2
-1) Modify classify so it appends to example tuple in train_set 
+1) Modify classify so it appends to example list in train_set 
 2) Create an accuracy function that checks if actual_label = tree_label and outputs an overall accuracy
 3) Figure out a way to output the depth of the tree and store it so each node knows the depth of the tree. 
 4) print_tree() - print root node and immediate children for Problem 2a Part 4
