@@ -35,9 +35,9 @@ class Node:
         else:
             self.label = 'M'
         
-        num_nodes += 1
+        Node.num_nodes += 1
         if self.is_pure():
-            num_leaves += 1
+            Node.num_leaves += 1
 
     def __str__(self):
         s = "Attribute " + str(self.attr) + ", <= " + str(self.val) + "\n" 
