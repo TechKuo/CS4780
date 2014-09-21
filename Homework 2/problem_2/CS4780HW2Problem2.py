@@ -11,6 +11,9 @@ import copy
 
 class Node:
 
+    num_nodes = 0
+    num_leaves = 0
+
     def __init__(self, ben, mal, attr_range, items, entropy):
         """
         precondition: attr, val are the attribute value pair this node will split on.
@@ -27,6 +30,14 @@ class Node:
         self.entropy = entropy
         self.left = None
         self.right = None
+        if ben > mal:
+            self.label = 'B'
+        else:
+            self.label = 'M'
+        
+        num_nodes += 1
+        if self.is_pure():
+            num_leaves += 1
 
     def __str__(self):
         s = "Attribute " + str(self.attr) + ", <= " + str(self.val) + "\n" 
@@ -137,6 +148,14 @@ class Node:
             print self
             self.left.make_babies()
             self.right.make_babies()
+    
+    def classify(self, item):
+        if self.is_pure():
+            return self.label
+        if item[self.attr] <= self.val:
+            self.left.classify(item)
+        else:
+            self.right.classify(item)
 
 def init_tree():
     root_ben = 0
