@@ -3,7 +3,7 @@
 # 9/18/2014
 # Homework 2 Problem 2
 
-import random
+import math
 import numpy as np
 import sys
 import copy
@@ -13,7 +13,7 @@ class Node:
 
     num_nodes = 0
     num_leaves = 0
-    depth = 1
+    depth = 0.0
 
     def __init__(self, ben, mal, attr_range, items, entropy):
         """
@@ -35,7 +35,10 @@ class Node:
             self.tree_label = 'B'
         else:
             self.tree_label = 'M'
-        
+        if (Node.num_nodes == 0):
+            Node.depth = 1.0
+        else:
+            Node.depth = math.floor(np.log2(Node.num_nodes)) + 1
         Node.num_nodes += 1
         if self.is_pure():
             Node.num_leaves += 1
@@ -46,7 +49,7 @@ class Node:
         s += "[" + str(self.ben) + ", " + str(self.mal) + "] \n"
         s += "Number of Nodes:" + str(Node.num_nodes) + "\n"
         s += "Number of Leaves: " + str(Node.num_leaves) + "\n"
-        #s += "Depth: " + str(Node.depth) + "\n"
+        s += "Depth: " + str(Node.depth) + "\n"
         s +=  "Tree Label: " + self.tree_label + "\n"
         return s
 
@@ -150,7 +153,7 @@ class Node:
             gt_attr_range[self.attr][0] = self.val + 1
             self.left = Node(rv[0], rv[1], lte_attr_range, rv[2], rv[3])
             self.right = Node(rv[4], rv[5], gt_attr_range, rv[6], rv[7])
-            # print self
+            print self
             self.left.make_babies()
             self.right.make_babies()
     
@@ -174,6 +177,7 @@ def init_tree(items):
     root_items = range(len(items))
     root_attr_range = [[1,10] for x in range(10)]
     root = Node(root_ben, root_mal, root_attr_range, root_items, root_entropy)
+    print root 
     root.make_babies()
     return root 
 
@@ -201,11 +205,21 @@ def parse_file(f):
         l.append(contents[:10])
     return l
 
+def print_root_and_children(dt):
+    print "Root:\n" + str(dt) + "\n"
+    print "Left Child:\n" + str(dt.left) + "\n"
+    print "Right Child:\n" + str(dt.right) + "\n"
+
+
 train_set = parse_file(sys.argv[1])
+test_set = parse_file(sys.argv[2])
 decision_tree = init_tree(train_set)
 classify_items(decision_tree,train_set)
-for example in train_set:
-    print str(example) + "\n" 
-acc = find_accuracy(train_set)
-print "Accuracy of training set: " + str(acc) + "\n"
+classify_items(decision_tree,test_set)
+acc_train = find_accuracy(train_set)
+acc_test = find_accuracy(test_set)
+#print "Decision Tree: \n"
+#print_root_and_children(decision_tree)
+print "Accuracy of training set: " + str(acc_train) + "\n"
+print "Accuracy of test set: " + str(acc_test) + "\n"
 
