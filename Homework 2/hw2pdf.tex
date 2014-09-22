@@ -1,0 +1,49 @@
+\documentclass[12pt]{article}
+\usepackage{fullpage}
+\usepackage{epic}
+\usepackage{eepic}
+\usepackage{graphicx}
+\usepackage{listings}
+
+\newcommand{\proof}[1]{
+{\noindent {\it Proof.} {#1} \rule{2mm}{2mm} \vskip \belowdisplayskip}
+}
+
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{theorem}[lemma]{Theorem}
+\newtheorem{claim}[lemma]{Claim}
+\newtheorem{definition}[lemma]{Definition}
+\newtheorem{corollary}[lemma]{Corollary}
+
+\setlength{\oddsidemargin}{0in}
+\setlength{\topmargin}{0in}
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{8.5in}
+
+\begin{document}
+\lstset{language=[Objective]Caml}
+\setlength{\fboxrule}{.5mm}\setlength{\fboxsep}{1.2mm}
+\newlength{\boxlength}\setlength{\boxlength}{\textwidth}
+\addtolength{\boxlength}{-4mm}
+\begin{center}\framebox{\parbox{\boxlength}{\bf
+CS 4780 Machine Learning \hfill Tech Kuo (thk42) \\
+ Homework 2  \hfill Ben Wang(bhw44) 
+}}\end{center}
+\vspace{5mm}
+
+\section*{Problem 2}
+\subsection*{(A)}
+\subsubsection*{(i)}
+The training set accuracy is 100\%
+\subsubsection*{(ii)}
+The test set accuracy is 90.5\%
+\subsubsection*{(iii)}
+The number of nodes is 51. \\
+The number of leaf nodes is 26. \\ 
+The depth of the tree is 6
+\subsubsection*{(iv)}
+Root: $Attribute_{2}$ $\leq$ 2 \\ 
+Left Child: $Attribute_{1}$ $\leq$ 6 \\ 
+Right Child: $Attribute_{6}$ $\leq$ 3 
+\subsection*{(B)}
+\end{document}
