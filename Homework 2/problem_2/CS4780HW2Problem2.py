@@ -13,7 +13,7 @@ class Node:
 
     num_nodes = 0
     num_leaves = 0
-    depth = 0.0
+    depth = 0
 
     def __init__(self, ben, mal, attr_range, items, entropy):
         """
@@ -31,15 +31,17 @@ class Node:
         self.entropy = entropy
         self.left = None
         self.right = None
+        Node.num_nodes += 1
+        self.num_nodes = Node.num_nodes
+        if (Node.num_nodes == 0):
+            Node.depth = 1
+        else:
+            Node.depth = int(math.floor(np.log2(Node.num_nodes))) + 1
+        self.depth = Node.depth
         if ben > mal:
             self.tree_label = 'B'
         else:
             self.tree_label = 'M'
-        if (Node.num_nodes == 0):
-            Node.depth = 1.0
-        else:
-            Node.depth = math.floor(np.log2(Node.num_nodes)) + 1
-        Node.num_nodes += 1
         if self.is_pure():
             Node.num_leaves += 1
 
@@ -47,9 +49,8 @@ class Node:
         s = "Attribute " + str(self.attr) + " <= " + str(self.val) + "\n" 
         s += "Entropy: " + str(self.entropy) + "\n"
         s += "[" + str(self.ben) + ", " + str(self.mal) + "] \n"
-        s += "Number of Nodes:" + str(Node.num_nodes) + "\n"
-        s += "Number of Leaves: " + str(Node.num_leaves) + "\n"
-        s += "Depth: " + str(Node.depth) + "\n"
+        s += "Number of Nodes Currently: " + str(self.num_nodes) + "\n"
+        s += "Depth of Node: " + str(self.depth) + "\n"
         s +=  "Tree Label: " + self.tree_label + "\n"
         return s
 
@@ -157,8 +158,8 @@ class Node:
             self.left.make_babies()
             self.right.make_babies()
     
-    def classify(self, item):
-        if self.is_pure():
+    def classify(self, item, d=depth):
+        if self.is_pure() or self.depth == d:
             return self.tree_label
         if item[self.attr] <= self.val:
             return self.left.classify(item)
@@ -181,9 +182,9 @@ def init_tree(items):
     root.make_babies()
     return root 
 
-def classify_items(dt,items):
+def classify_items(dt,items,d=Node.depth):
     for example in items:
-        tree_label = dt.classify(example)
+        tree_label = dt.classify(example,d)
         example.append(tree_label)
 
 def find_accuracy(classified_items):
@@ -218,8 +219,9 @@ classify_items(decision_tree,train_set)
 classify_items(decision_tree,test_set)
 acc_train = find_accuracy(train_set)
 acc_test = find_accuracy(test_set)
-print "Decision Tree: \n"
+print "-----------Decision Tree----------- \n"
 print_root_and_children(decision_tree)
+print "Total Number of Nodes: " + str(Node.num_nodes) + "\n"
+print "Total Number of Leaves: " + str(Node.num_leaves) + "\n"
 print "Accuracy of training set: " + str(acc_train) + "\n"
 print "Accuracy of test set: " + str(acc_test) + "\n"
-
