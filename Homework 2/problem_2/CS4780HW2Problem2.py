@@ -65,10 +65,10 @@ class Node:
         return (self.ben == 0) or (self.mal == 0)
 
     def find_best_attribute(self):
-        ben_lte = 0
-        mal_lte = 0
-        ben_gt = 0
-        mal_gt = 0
+        ben_lte = 0 #-1 indicates a leaf node
+        mal_lte = 0 #-1 indicates a leaf node
+        ben_gt = 0 #-1 indicates a leaf node
+        mal_gt = 0 #-1 indicates a leaf node
 
         max_ben_lte = -1
         max_mal_lte = -1
@@ -88,7 +88,7 @@ class Node:
         for attr in range(1,10):
             lo = self.attr_range[attr][0]
             hi = self.attr_range[attr][1]
-            for val in range(lo, hi):
+            for val in range(lo, hi+1):
                 rv = self.calc_values(attr, val)
                 ben_lte, mal_lte, curr_lte_items, entropy_lte = rv[:4]
                 ben_gt, mal_gt, curr_gt_items, entropy_gt, gain = rv[4:]
@@ -218,8 +218,8 @@ classify_items(decision_tree,train_set)
 classify_items(decision_tree,test_set)
 acc_train = find_accuracy(train_set)
 acc_test = find_accuracy(test_set)
-#print "Decision Tree: \n"
-#print_root_and_children(decision_tree)
+print "Decision Tree: \n"
+print_root_and_children(decision_tree)
 print "Accuracy of training set: " + str(acc_train) + "\n"
 print "Accuracy of test set: " + str(acc_test) + "\n"
 
