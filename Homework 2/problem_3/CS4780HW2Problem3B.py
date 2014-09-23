@@ -1,6 +1,7 @@
 import math
 import matplotlib.pyplot as plt
 
+
 train_x = [1,1,2,2,4,6,3,3,4,5,5,6]
 train_y = [4,6,1,2,1,1,3,4,3,5,6,5]
 train_color = ['red','red','red','red','red','red','blue','blue','blue','blue','blue','blue']
