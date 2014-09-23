@@ -51,13 +51,13 @@ def store_point(x, y, neighbors):
         yblue.append(y)
 
 
-for i in range(6):
+for i in range(12):
     new_point = Point(train_x[i], train_y[i], train_color[i])
     training_set.append(new_point)
-x_range = range(-16,64)
+x_range = range(48)
 for i in range(len(x_range)):
     x_range[i] /= 8.0
-y_range = range(-80,240,5)
+y_range = range(48)
 for i in range(len(y_range)):
     y_range[i] /= 8.0
 
